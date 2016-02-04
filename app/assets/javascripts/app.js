@@ -1,1 +1,1 @@
-testing
+angular.module("MyApp", []);
