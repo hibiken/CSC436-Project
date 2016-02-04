@@ -19,3 +19,8 @@ group :development do
   gem 'spring'
 end
 
+group :test do
+  gem 'database_cleaner', '~> 1.5'
+  gem 'ffaker', '~> 2.2'
+end
+
