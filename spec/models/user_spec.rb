@@ -40,6 +40,27 @@ RSpec.describe User do
 
       expect(user2).to be_invalid
     end
+
+    it "requires password" do
+      user.password = nil
+      expect(user).to be_invalid
+    end
+
+    it "requires that password and password_confirmation match" do
+      user.password = "password"
+      user.password_confirmation = "notmatch"
+
+      expect(user).to be_invalid
+    end
+
+    it "requires that password is at least 8 characters long" do
+      user.password = "a" * 7
+      user.password_confirmation = "a" * 7
+      expect(user).to be_invalid
+      user.password = "a" * 8
+      user.password_confirmation = "a" * 8
+      expect(user).to be_valid
+    end
   end
 
   describe "callback hooks" do
