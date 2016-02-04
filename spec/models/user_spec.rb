@@ -79,7 +79,20 @@ RSpec.describe User do
         expect(User.exists?(auth_token: user.auth_token)).to be_falsy
       end
     end
+  end
 
+  describe "#delete_auth_token" do
+    before(:each) do
+      @user = create(:user, auth_token: "abcdef1234567890")
+    end
+
+    it "sets auth_token to nil" do
+      expect(@user.auth_token).not_to be_nil
+
+      @user.delete_auth_token
+      @user.reload
+      expect(@user.auth_token).to be_nil
+    end
   end
 
 end
