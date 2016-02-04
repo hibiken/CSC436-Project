@@ -1,1 +1,2 @@
-angular.module("MyApp", []);
+angular.module("MyApp", [])
+	.controller("MainCtrl", function() {});
