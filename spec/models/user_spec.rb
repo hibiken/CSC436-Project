@@ -69,6 +69,17 @@ RSpec.describe User do
       user.save
       expect(user.reload.email).to eq("example@gmail.com")
     end
+
+    describe "#set_auth_token" do
+      it "sets a unique auth_token to the user" do
+        user = build(:user)
+        user.set_auth_token
+
+        expect(user.auth_token).not_to be_nil
+        expect(User.exists?(auth_token: user.auth_token)).to be_falsy
+      end
+    end
+
   end
 
 end
