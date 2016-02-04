@@ -1,16 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController do
-  before(:each) { request.headers['Accept'] = "application/vnd.socialmedia.v1+json" }
+  before(:each) do
+    set_api_accept_header(version: 1)
+    set_content_type_header(Mime::JSON.to_s)
+  end
 
   describe "GET #show" do
     before(:each) do
       @user = create(:user)
-      get :show, id: @user.id, format: :json
+      get :show, id: @user.id
     end
 
     it "returns requested user data in JSON format" do
-      user = JSON.parse(response.body, symbolize_names: true)
+      user = json(response.body)
       expect(user[:email]).to eq(@user.email)
     end
 
@@ -23,11 +26,11 @@ RSpec.describe Api::V1::UsersController do
     context "creation successful" do
       before(:each) do
         @user_attributes = attributes_for(:user)
-        post :create, { user: @user_attributes }, format: :json
+        post :create, { user: @user_attributes }
       end
 
       it "renders the new user record in JSON format" do
-        user = JSON.parse(response.body, symbolize_names: true)
+        user = json(response.body)
         expect(user[:email]).to eq(@user_attributes[:email])
       end
 
@@ -39,11 +42,11 @@ RSpec.describe Api::V1::UsersController do
     context "creation unsuccessful" do
       before(:each) do
         @invalid_attributes = attributes_for(:user, email: " ")
-        post :create, { user: @invalid_attributes }, format: :json
+        post :create, { user: @invalid_attributes }
       end
 
       it "renders json with error message" do
-        user = JSON.parse(response.body, symbolize_names: true)
+        user = json(response.body)
         expect(user[:errors]).to be_present
       end
 
