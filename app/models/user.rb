@@ -14,6 +14,11 @@ class User < ActiveRecord::Base
   before_save :downcase_email
   before_create :set_auth_token
 
+  def self.authenticate(email, password)
+    user = User.find_by(email: email)
+    user && user.authenticate(password)
+  end
+
   def set_auth_token
     self.auth_token = generate_auth_token
   end

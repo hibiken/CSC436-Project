@@ -2,9 +2,8 @@ class Api::V1::SessionsController < ApplicationController
 
   def create
     email, password = params[:session][:email], params[:session][:password]
-    user = User.find_by(email: email)
 
-    if user && user.authenticate(password)
+    if user = User.authenticate(email, password)
       user.set_auth_token
       user.save
       render json: user.reload, status: 200, location: [:api, user]
