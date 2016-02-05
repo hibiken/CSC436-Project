@@ -56,4 +56,54 @@ RSpec.describe Api::V1::UsersController do
     end
   end
 
+  describe "PUT/PATCH #update" do
+    context "successful update" do
+      before(:each) do
+        @user_attributes = { email: "updated@email.com" }
+        @user = create(:user)
+        login_and_set_authorization_header_for(@user)
+        patch :update, id: @user.id, user: @user_attributes
+      end
+
+      it "renders updated user record in JSON format" do
+        user = json(response.body)
+        expect(user[:email]).to eq("updated@email.com")
+      end
+
+      it "responds with HTTP status 200" do
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context "unsuccessful update" do
+      before(:each) do
+        @user_attributes = { email: "    " }
+        @user = create(:user)
+        login_and_set_authorization_header_for(@user)
+        patch :update, id: @user.id, user: @user_attributes
+      end
+
+      it "renders JSON with error message" do
+        user = json(response.body)
+        expect(user[:errors]).to be_present
+      end
+
+      it "responds with HTTP status 422" do
+        expect(response.status).to eq(422)
+      end
+    end
+
+    context "when user is not logged in" do
+      before(:each) do
+        @user_attributes = { email: "updated@email.com" }
+        @user = create(:user)
+        patch :update, id: @user.id, user: @user_attributes
+      end
+
+      it "responds with HTTP status 401" do
+        expect(response.status).to eq(401)
+      end
+    end
+  end
+
 end

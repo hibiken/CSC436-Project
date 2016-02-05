@@ -13,5 +13,11 @@ module Request
     def set_content_type_header(type)
       request.headers['Content-Type'] = type
     end
+
+    def login_and_set_authorization_header_for(user)
+      user.set_auth_token
+      user.save
+      request.headers['Authorization'] = user.auth_token
+    end
   end
 end
