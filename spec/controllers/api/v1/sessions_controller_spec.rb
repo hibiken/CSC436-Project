@@ -18,9 +18,14 @@ RSpec.describe Api::V1::SessionsController do
       end
 
       it "renders the user record correspoding the given credentials" do
-        user = json(response.body)
+        user = json(response.body)[:user]
+        expect(user[:email]).to eq(@user.email)
+      end
+
+      it "renders meta data containing user's auth_token" do
+        meta_data = json(response.body)[:meta]
         @user.reload
-        expect(user[:auth_token]).to eq(@user.auth_token)
+        expect(meta_data[:auth_token]).to eq(@user.auth_token)
       end
 
       it "responds with HTTP status 200" do

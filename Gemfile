@@ -10,6 +10,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Authentication
 gem 'bcrypt', '~> 3.1'
 
+# Serialization
+gem 'active_model_serializers', '~> 0.9.4'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.4'
   gem 'factory_girl_rails', '~> 4.6'

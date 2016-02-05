@@ -13,7 +13,7 @@ RSpec.describe Api::V1::UsersController do
     end
 
     it "returns requested user data in JSON format" do
-      user = json(response.body)
+      user = json(response.body)[:user]
       expect(user[:email]).to eq(@user.email)
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders the new user record in JSON format" do
-        user = json(response.body)
+        user = json(response.body)[:user]
         expect(user[:email]).to eq(@user_attributes[:email])
       end
 
@@ -66,7 +66,7 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders updated user record in JSON format" do
-        user = json(response.body)
+        user = json(response.body)[:user]
         expect(user[:email]).to eq("updated@email.com")
       end
 

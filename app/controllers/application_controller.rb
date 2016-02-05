@@ -19,4 +19,9 @@ class ApplicationController < ActionController::Base
     def user_signed_in?
       current_user.present?
     end
+
+    def current_user?(user)
+      return false unless current_user
+      current_user.id == user.id
+    end
 end
