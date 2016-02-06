@@ -7,18 +7,35 @@ RSpec.describe Api::V1::UsersController do
   end
 
   describe "GET #show" do
-    before(:each) do
-      @user = create(:user)
-      get :show, id: @user.id
+    context "when asked for existent record" do
+      before(:each) do
+        @user = create(:user)
+        get :show, id: @user.id
+      end
+
+      it "returns requested user data in JSON format" do
+        user = json(response.body)[:user]
+        expect(user[:email]).to eq(@user.email)
+      end
+
+      it "responds with HTTP status 200" do
+        expect(response.status).to eq(200)
+      end
     end
 
-    it "returns requested user data in JSON format" do
-      user = json(response.body)[:user]
-      expect(user[:email]).to eq(@user.email)
-    end
+    context "when asked for non-existent record" do
+      before(:each) do
+        get :show, id: 1000
+      end
 
-    it "responds with HTTP status 200" do
-      expect(response.status).to eq(200)
+      it "returns JSON with error message" do
+        json_response = json(response.body)
+        expect(json_response[:errors]).to be_present
+      end
+
+      it "responds with HTTP status 404" do
+        expect(response.status).to eq(404)
+      end
     end
   end
 

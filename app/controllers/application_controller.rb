@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
   protected
 
     def current_user
@@ -23,5 +25,9 @@ class ApplicationController < ActionController::Base
     def current_user?(user)
       return false unless current_user
       current_user.id == user.id
+    end
+
+    def not_found
+      render json: { errors: "Not found" }, status: 404
     end
 end
