@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  has_many :posts, dependent: :destroy
+
   validates :first_name, :last_name, presence: true
 
   VALID_EMAIL_REGEX = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
