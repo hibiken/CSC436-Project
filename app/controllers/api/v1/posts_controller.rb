@@ -1,4 +1,5 @@
 class Api::V1::PostsController < ApplicationController
+  before_action :authenticate_with_token!, except: [:show]
 
   def show
     post = Post.find(params[:id])
@@ -6,10 +7,9 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def create
-    user = User.find(params[:user_id])
-    post = user.posts.new(post_params)
+    post = current_user.posts.new(post_params)
     if post.save
-      render json: post, status: 201, location: [:api, user, post]
+      render json: post, status: 201, location: [:api, current_user, post]
     else
       render json: { errors: post.errors }, status: 422
     end
