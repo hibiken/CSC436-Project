@@ -67,10 +67,58 @@ RSpec.describe Api::V1::PostsController do
         post :create, { user_id: @user.id, post: @post_attributes }
       end
 
-      # it "returns newly created post in JSON format" do
-      #   post_response = json(response.body)
-      #   expect(post_response[:email]).to eq(@post_attributes[:email])
-      # end
+      it "responds with HTTP status 401" do
+        expect(response.status).to eq(401)
+      end
+    end
+  end
+
+  describe "PATCH/PUT #update" do
+    context "with logged-in user and valid input" do
+      before(:each) do
+        @current_user = create(:user)
+        @post = create(:post, user: @current_user)
+        @post_attributes = { title: "Updated title" }
+        login_and_set_authorization_header_for(@current_user)
+        patch :update, { user_id: @current_user.id, id: @post.id, post: @post_attributes }
+      end
+
+      it "returns updated post in JSON format" do
+        post_response = json(response.body)
+        expect(post_response[:title]).to eq("Updated title")
+      end
+
+      it "responds with HTTP staut 200" do
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context "with logged-in user and invalid input" do
+      before(:each) do
+        @current_user = create(:user)
+        @post = create(:post, user: @current_user)
+        @post_attributes = { title: "" }
+        login_and_set_authorization_header_for(@current_user)
+        patch :update, { user_id: @current_user.id, id: @post.id, post: @post_attributes }
+      end
+
+      it "returns JSON with error messages" do
+        json_response = json(response.body)
+        expect(json_response[:errors]).to be_present
+      end
+
+      it "responds with HTTP status 422" do
+        expect(response.status).to eq(422)
+      end
+    end
+
+    context "when user is not logged in" do
+      before(:each) do
+        @user = create(:user)
+        @post = create(:post, user: @user)
+        @post_attributes = { title: "Updated title" }
+        patch :update, { user_id: @user.id, id: @post.id, post: @post_attributes }
+      end
 
       it "responds with HTTP status 401" do
         expect(response.status).to eq(401)

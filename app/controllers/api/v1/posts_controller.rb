@@ -15,6 +15,15 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  def update
+    post = current_user.posts.find(params[:id])
+    if post.update(post_params)
+      render json: post, status: 200, location: [:api, current_user, post]
+    else
+      render json: { errors: post.errors }, status: 422
+    end
+  end
+
   private
 
     def post_params
