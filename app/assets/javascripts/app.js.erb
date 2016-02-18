@@ -1,0 +1,23 @@
+var app = angular.module("SocialMedia", ["ngRoute"]);
+
+app.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode({
+    enabled: true,
+    requireBase: false
+  });
+  $routeProvider
+    .when("/", {
+      tempalteUrl: "<%= asset_path('social-media/home.html') %>"
+    })
+    .when("/login", {
+      tempalteUrl: "<%= asset_path('social-media/login.html') %>"
+    });
+
+}]);
+
+app.controller('LoginCtrl', ['$scope', function($scope){
+  $scope.username = "Ken Hibino"
+  $scope.password = "password"
+}]);
+
+
