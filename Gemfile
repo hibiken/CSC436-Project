@@ -29,3 +29,6 @@ group :test do
   gem 'ffaker', '~> 2.2'
 end
 
+group :production do
+  gem 'rails_12factor'
+end
