@@ -1,5 +1,10 @@
 class Api::V1::PostsController < ApplicationController
-  before_action :authenticate_with_token!, except: [:show]
+  before_action :authenticate_with_token!, except: [:index, :show]
+
+  def index
+    posts = Post.all
+    render json: posts, status: 200
+  end
 
   def show
     post = Post.find(params[:id])
