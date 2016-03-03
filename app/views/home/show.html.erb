@@ -7,32 +7,21 @@
         <th>Endpoint</th>
         <th>Method</th>
         <th>Example</th>
-        <th>Sample response</th>
+        <th>Sample response / Sample request body</th>
         <th>Description</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr>
-        <td><i>/api/users</i><td>
-        <td>POST</td>
-        <td>https://csc436-project.herokuapp.com/</td>
-        <td><pre>
-{ "user": { 
-    "first_name": "Ken", 
-    "last_name": "Hibino",
-    "email": "ken@example.com",
-    "password" : "userspassword",
-    "password_confirmation": "userspassword"
-   }
-}</pre></td>
-        <td>This endpoint is for user to sign up</td>
-      </tr>
-      <tr>
-      </tr>
-      <tr></tr>
-      <tr></tr>
-      <tr></tr>
+      <% @api_details.each do |api| %>
+        <tr>
+          <td><i><%= api[:endpoint] %></i></td>
+          <td><%= api[:method] %></td>
+          <td><%= api[:example] %></td>
+          <td><pre><%= api[:json] %></pre></td>
+          <td><%= api[:description] %></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
